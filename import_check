@@ -1,0 +1,17 @@
+import pandas as pd
+df = pd.read_csv('cleanupexercise csv.csv')
+
+# drop duplicates 
+df[df.duplicated()] # check for duplicate entries
+df = df.drop_duplicates() # remove duplicates
+
+# Fix data type of dates
+df['Created'] = pd.to_datetime(df['Created'], errors='coerce').dt.strftime('%Y-%m-%d')
+df['Hired at'] = pd.to_datetime(df['Hired at'], errors='coerce').dt.strftime('%Y-%m-%d')
+df['Rejected at'] = pd.to_datetime(df['Rejected at'], errors='coerce').dt.strftime('%Y-%m-%d')
+
+# Fix Job Designations
+df['Job_Title'] = df['Job_Title'].str.lower()
+df['Job_Title'] = df['Job_Title'].str.replace(r'.*treatment coordinator.*','Treatment Coordinator',regex=True)
+
+df.Job_Title.unique()
