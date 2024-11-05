@@ -10,8 +10,27 @@ df['Created'] = pd.to_datetime(df['Created'], errors='coerce').dt.strftime('%Y-%
 df['Hired at'] = pd.to_datetime(df['Hired at'], errors='coerce').dt.strftime('%Y-%m-%d')
 df['Rejected at'] = pd.to_datetime(df['Rejected at'], errors='coerce').dt.strftime('%Y-%m-%d')
 
+# Fix Column Names
+df = df.rename(columns = {'Job title':'Job_Title', 'Stage type':'Stage_type'})
+
 # Fix Job Designations
 df['Job_Title'] = df['Job_Title'].str.lower()
 df['Job_Title'] = df['Job_Title'].str.replace(r'.*treatment coordinator.*','Treatment Coordinator',regex=True)
-
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*office manager.*','Office Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*receptionist.*','Receptionist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*financial coordinator.*','Financial Coordinator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*hygienist.*','Hygienist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*dentist.*','Dentist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*orthodontist.*','Orthodontist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*assistant.*','Dental Assistant',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*business operations manager.*','Business Operations Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*patient relations manager.*','Patient Relations Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*business coach.*','Business Coach',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*dental patient care & finance manager.*','Patient Care & Finance Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*asistente.*','Dental Assistant',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'^dental\s','',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*pcfc.*','Patient Care & Finance Coordinator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*patient care (&|and) finance coordinator.*','Patient Care & Finance Coordinator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*front desk.*','Front Desk Administrator',regex=True)
+df = df.Job_Title_temp.str.title()
 df.Job_Title.unique()
