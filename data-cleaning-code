@@ -16,7 +16,7 @@ df = df.rename(columns = {'Job title':'Job_Title', 'Stage type':'Stage_type', 'S
 # Fix Job Designations
 df['Job_Title'] = df['Job_Title'].str.lower()
 df['Job_Title_temp'] = df['Job_Title'] #set a temporary series/column
-df['Job_Title'] = df['Job_Title'].str.replace(r'.*treatment coordinator.*','Treatment Coordinator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*treatment coordinator.*','Treatment Coordinator',regex=True)
 df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*office manager.*','Office Manager',regex=True)
 df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*receptionist.*','Receptionist',regex=True)
 df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*financial coordinator.*','Financial Coordinator',regex=True)
@@ -56,4 +56,17 @@ df['Stage_name'] = df['Stage_name_temp']
 df = df.drop('Stage_name_temp', axis = 1) # Remove temporary column for stage name and correct/set permanently
 
 # Fix Referring Sites
-
+df = df.dropna(subset=['Referring_site']) #drop NaN values
+df['Referring_site_temp'] = df['Referring_site'] #set a temporary series/column
+df['Referring_site_temp'] = df['Referring_site_temp'].str.lower()
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*indeed.*','Indeed',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*talent.*','Talent.com',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*google.*','Google Jobs',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*zip.*','Ziprecruiter',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*jooble.*','Jooble',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*familydental.*','dental website',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*monster.*','Monster',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*salary.*','Salary.com',regex=True)
+df.Referring_site_temp = df.Referring_site_temp.str.title()
+df['Referring_site'] = df['Referring_site_temp']
+df = df.drop('Referring_site_temp', axis = 1) # Remove temporary column for referring site and correct/set permanently
