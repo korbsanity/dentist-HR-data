@@ -33,6 +33,7 @@ df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'^dental\s','',regex=Tr
 df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*pcfc.*','Patient Care & Finance Coordinator',regex=True)
 df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*patient care (&|and) finance coordinator.*','Patient Care & Finance Coordinator',regex=True)
 df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*front desk.*','Front Desk Administrator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*field.*','regional fields operations manager',regex=True)
 df = df[~df['Job_Title_temp'].str.contains('test')]
 df.Job_Title_temp = df.Job_Title_temp.str.title()
 
