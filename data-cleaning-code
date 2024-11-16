@@ -72,3 +72,30 @@ df['Referring_site'] = df['Referring_site_temp']
 df = df.drop('Referring_site_temp', axis = 1) # Remove temporary column for referring site and correct/set permanently
 
 # Fix Reject Reason
+df['Reject_reason-temp']=df['Reject_reason']
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.lower()
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*location.*','location',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*nyc.*','location',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*nyc.*','location',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*not eligible to work in the us.*','location',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'no show','unresponsive',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*unresponsive.*','unresponsive',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'scheduling','unresponsive',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'never responded','unresponsive',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*salary.*','salary',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*experience.*','lack of experience',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*flexibility.*','lack of experience',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*rejected.*','lack of experience',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*failed.*interview.*','failed interview',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*not interested.*','withdrew',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*took another.*','withdrew',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*not.*fit.*','not a cultural fit',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*reference.*','reference issues',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*position filled.*','pipeline',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*more qualified.*','pipeline',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.title()
+df['Reject_reason']=df['Reject_reason-temp']
+df=df.drop('Reject_reason-temp',axis=1)
+
+# Output Data
+df.to_csv('cleanupexercise csv_cleaned.csv', index=False)
