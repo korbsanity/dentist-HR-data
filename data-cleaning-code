@@ -1,108 +1,89 @@
 import pandas as pd
 df = pd.read_csv('cleanupexercise csv.csv')
 
-def data_clean():
-  # drop duplicates 
-  df[df.duplicated()] # check for duplicate entries
-  df = df.drop_duplicates() # remove duplicates
-  
-  # Fix data type of dates
-  df['Created'] = pd.to_datetime(df['Created'], errors='coerce').dt.strftime('%Y-%m-%d')
-  df['Hired at'] = pd.to_datetime(df['Hired at'], errors='coerce').dt.strftime('%Y-%m-%d')
-  df['Rejected at'] = pd.to_datetime(df['Rejected at'], errors='coerce').dt.strftime('%Y-%m-%d')
-  
-  # Fix Column Names
-  df = df.rename(columns = {'Job title':'Job_Title', 'Stage type':'Stage_type', 'Stage name':'Stage_name', 'Referring site':'Referring_site', 'Reject reason':'Reject_reason'})
-  
-  # Fix Job Designations
-  df['Job_Title'] = df['Job_Title'].str.lower()
-  df['Job_Title_temp'] = df['Job_Title'] #set a temporary series/column
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*treatment coordinator.*','Treatment Coordinator',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*office manager.*','Office Manager',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*receptionist.*','Receptionist',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*financial coordinator.*','Financial Coordinator',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*hygienist.*','Hygienist',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*dentist.*','Dentist',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*orthodontist.*','Orthodontist',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*assistant.*','Dental Assistant',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*business operations manager.*','Business Operations Manager',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*patient relations manager.*','Patient Relations Manager',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*business coach.*','Business Coach',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*dental patient care & finance manager.*','Patient Care & Finance Manager',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*asistente.*','Dental Assistant',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'^dental\s','',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*pcfc.*','Patient Care & Finance Coordinator',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*patient care (&|and) finance coordinator.*','Patient Care & Finance Coordinator',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*front desk.*','Front Desk Administrator',regex=True)
-  df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*field.*','regional fields operations manager',regex=True)
-  df = df[~df['Job_Title_temp'].str.contains('test')]
-  df.Job_Title_temp = df.Job_Title_temp.str.title()
-  
-  # Remove temporary column for Job Designations and correct designations permanently
-  df['Job_Title'] = df['Job_Title_temp']
-  df = df.drop('Job_Title_temp', axis = 1)
-  
-  # Fix Stage Name
-  df['Stage_name_temp'] = df['Stage_name'] #set a temporary series/column
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.lower()
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*interview.*','interview',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*screening.*','screening',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*reject.*','rejected',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*pending.*','pending',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*response needed.*','pending',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*resume.*','reviewing',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*not a fit.*','rejected',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*could be a good fit.*','pool',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'inbox','application received',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'reviewing','application received',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'pipeline','pool',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'bench','pool',regex=True)
-  df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'screening','pending',regex=True)
-  df.Stage_name_temp = df.Stage_name_temp.str.title()
-  df['Stage_name'] = df['Stage_name_temp']
-  df = df.drop('Stage_name_temp', axis = 1) # Remove temporary column for stage name and correct/set permanently
-  
-  # Fix Referring Sites
-  df = df.dropna(subset=['Referring_site']) #drop NaN values
-  df['Referring_site_temp'] = df['Referring_site'] #set a temporary series/column
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.lower()
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*indeed.*','Indeed',regex=True)
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*talent.*','Talent.com',regex=True)
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*google.*','Google Jobs',regex=True)
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*zip.*','Ziprecruiter',regex=True)
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*jooble.*','Jooble',regex=True)
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*familydental.*','dental website',regex=True)
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*monster.*','Monster',regex=True)
-  df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*salary.*','Salary.com',regex=True)
-  df.Referring_site_temp = df.Referring_site_temp.str.title()
-  df['Referring_site'] = df['Referring_site_temp']
-  df = df.drop('Referring_site_temp', axis = 1) # Remove temporary column for referring site and correct/set permanently
-  
-  # Fix Reject Reason
-  df['Reject_reason-temp']=df['Reject_reason']
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.lower()
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*location.*','location',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*nyc.*','location',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*nyc.*','location',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*not eligible to work in the us.*','location',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'no show','unresponsive',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*unresponsive.*','unresponsive',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'scheduling','unresponsive',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'never responded','unresponsive',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*salary.*','salary',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*experience.*','lack of experience',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*flexibility.*','lack of experience',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*rejected.*','lack of experience',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*failed.*interview.*','failed interview',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*not interested.*','withdrew',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*took another.*','withdrew',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*not.*fit.*','not a cultural fit',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*reference.*','reference issues',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*position filled.*','pipeline',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*more qualified.*','pipeline',regex=True)
-  df['Reject_reason-temp']=df['Reject_reason-temp'].str.title()
-  df['Reject_reason']=df['Reject_reason-temp']
-  df=df.drop('Reject_reason-temp',axis=1)
+# drop duplicates 
+df[df.duplicated()] # check for duplicate entries
+df = df.drop_duplicates() # remove duplicates
+
+# Fix data type of dates
+df['Created'] = pd.to_datetime(df['Created'], errors='coerce').dt.strftime('%Y-%m-%d')
+df['Hired at'] = pd.to_datetime(df['Hired at'], errors='coerce').dt.strftime('%Y-%m-%d')
+df['Rejected at'] = pd.to_datetime(df['Rejected at'], errors='coerce').dt.strftime('%Y-%m-%d')
+
+# Fix Column Names
+df = df.rename(columns = {'Job title':'Job_Title', 'Stage type':'Stage_type', 'Stage name':'Stage_name', 'Referring site':'Referring_site', 'Reject reason':'Reject_reason'})
+
+# Fix Job Designations
+df['Job_Title'] = df['Job_Title'].str.lower()
+df['Job_Title_temp'] = df['Job_Title'] #set a temporary series/column
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*treatment coordinator.*','Treatment Coordinator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*office manager.*','Office Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*receptionist.*','Receptionist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*financial coordinator.*','Financial Coordinator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*hygienist.*','Hygienist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*dentist.*','Dentist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*orthodontist.*','Orthodontist',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*assistant.*','Dental Assistant',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*business operations manager.*','Business Operations Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*patient relations manager.*','Patient Relations Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*business coach.*','Business Coach',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*dental patient care & finance manager.*','Patient Care & Finance Manager',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*asistente.*','Dental Assistant',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'^dental\s','',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*(pcfc|patient care (&|and) finance coordinator).*','patient care & finance coordinator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*front desk.*','Front Desk Administrator',regex=True)
+df['Job_Title_temp'] = df['Job_Title_temp'].str.replace(r'.*field.*','regional fields operations manager',regex=True)
+df = df[~df['Job_Title_temp'].str.contains('test')]
+df.Job_Title_temp = df.Job_Title_temp.str.title()
+
+# Remove temporary column for Job Designations and correct designations permanently
+df['Job_Title'] = df['Job_Title_temp']
+df = df.drop('Job_Title_temp', axis = 1)
+
+# Fix Stage Name
+df['Stage_name_temp'] = df['Stage_name'] #set a temporary series/column
+df['Stage_name_temp'] = df['Stage_name_temp'].str.lower()
+df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*interview.*','interview',regex=True)
+df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*(reject|not a fit).*','rejected',regex=True)
+df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*(pending|response needed|screening).*','pending',regex=True)
+df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*resume.*','reviewing',regex=True)
+df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*(could be a good fit|pipeline|bench).*','pool',regex=True)
+df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'(inbox|reviewing)','application received',regex=True)
+df.Stage_name_temp = df.Stage_name_temp.str.title()
+df['Stage_name'] = df['Stage_name_temp']
+df = df.drop('Stage_name_temp', axis = 1) # Remove temporary column for stage name and correct/set permanently
+
+# Fix Referring Sites
+df = df.dropna(subset=['Referring_site']) #drop NaN values
+df['Referring_site_temp'] = df['Referring_site'] #set a temporary series/column
+df['Referring_site_temp'] = df['Referring_site_temp'].str.lower()
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*indeed.*','Indeed',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*talent.*','Talent.com',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*google.*','Google Jobs',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*zip.*','Ziprecruiter',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*jooble.*','Jooble',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*familydental.*','dental website',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*monster.*','Monster',regex=True)
+df['Referring_site_temp'] = df['Referring_site_temp'].str.replace(r'.*salary.*','Salary.com',regex=True)
+df.Referring_site_temp = df.Referring_site_temp.str.title()
+df['Referring_site'] = df['Referring_site_temp']
+df = df.drop('Referring_site_temp', axis = 1) # Remove temporary column for referring site and correct/set permanently
+
+# Fix Reject Reason
+df['Reject_reason-temp']=df['Reject_reason']
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.lower()
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*(location|nyc|not eligible to work in the us).*','location',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'(no show|.*unresponsive.*|.*schedul.*|.*never responded.*)','unresponsive',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*salary.*','salary',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*(experience|flexibility).*','lack of experience',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*(failed.*interview|rejected).*','rejected',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*(not interested|took another).*','withdrew',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*not.*fit.*','cultural misfit',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*reference.*','reference issues',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.replace(r'.*(position filled|more qualified).*','position filled',regex=True)
+df['Reject_reason-temp']=df['Reject_reason-temp'].str.title()
+df['Reject_reason']=df['Reject_reason-temp']
+df=df.drop('Reject_reason-temp',axis=1)
 
 # Output Data
 df.to_csv('cleanupexercise csv_cleaned.csv', index=False)
