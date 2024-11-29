@@ -11,7 +11,14 @@ df['Hired at'] = pd.to_datetime(df['Hired at'], errors='coerce').dt.strftime('%Y
 df['Rejected at'] = pd.to_datetime(df['Rejected at'], errors='coerce').dt.strftime('%Y-%m-%d')
 
 # Fix Column Names
-df = df.rename(columns = {'Job title':'Job_Title', 'Stage type':'Stage_type', 'Stage name':'Stage_name', 'Referring site':'Referring_site', 'Reject reason':'Reject_reason'})
+df = df.rename(columns = {'Job title':'Job_Title',
+'Stage type':'Stage_type',
+'Stage name':'Stage_name',
+'Referring site':'Referring_site',
+'Reject reason':'Reject_reason',
+'Rejected at':'Rejected_at',
+'Hired at':'Hired_at',
+})
 
 # Fix Job Designations
 df['Job_Title'] = df['Job_Title'].str.lower()
