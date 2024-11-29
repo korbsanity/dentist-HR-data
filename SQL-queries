@@ -1,0 +1,5 @@
+-- funnel chart query
+SELECT DISTINCT(Stage_name), COUNT(Stage_name) as applicants
+FROM cryptic-album-429714-q7.dentist.hr_data_dentist
+WHERE Reject_reason IS NOT NULL OR Hired_at IS NOT NULL
+GROUP BY Stage_name
