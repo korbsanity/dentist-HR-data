@@ -52,7 +52,7 @@ df['Stage_name_temp'] = df['Stage_name'] #set a temporary series/column
 df['Stage_name_temp'] = df['Stage_name_temp'].str.lower()
 df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*interview.*','interview',regex=True)
 df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*(reject|not a fit).*','rejected',regex=True)
-df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*(pending|response needed|screening).*','pending',regex=True)
+df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*(pending|response needed|screening).*','screening',regex=True)
 df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*resume.*','reviewing',regex=True)
 df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'.*(could be a good fit|pipeline|bench).*','pool',regex=True)
 df['Stage_name_temp'] = df['Stage_name_temp'].str.replace(r'(inbox|reviewing)','application received',regex=True)
