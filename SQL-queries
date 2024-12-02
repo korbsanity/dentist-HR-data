@@ -3,3 +3,14 @@ SELECT DISTINCT(Stage_name), COUNT(Stage_name) as applicants
 FROM cryptic-album-429714-q7.dentist.hr_data_dentist
 WHERE Reject_reason IS NOT NULL OR Hired_at IS NOT NULL
 GROUP BY Stage_name
+
+-- time-to-hire analysis
+SELECT applicant,
+job_title,
+Created,
+hired_at, 
+abs(DATE_DIFF(Created, Hired_at, DAY)) AS process_days
+FROM cryptic-album-429714-q7.dentist.hr_data_dentist
+WHERE hired_at IS NOT NULL
+ORDER BY Created
+-- unfinished
